@@ -48,31 +48,6 @@ function onError() {
   $.util.beep();
 }
 
-// Lint a set of files
-function lint(files) {
-  return gulp.src(files)
-    .pipe($.plumber())
-    .pipe($.eslint())
-    .pipe($.eslint.format())
-    .pipe($.eslint.failOnError())
-    .pipe($.jscs())
-    .pipe($.jscs.reporter())
-    .pipe($.jscs.reporter('fail'))
-    .on('error', onError);
-}
-
-function lintSrc() {
-  return lint('src/**/*.js');
-}
-
-function lintTest() {
-  return lint('test/**/*.js');
-}
-
-function lintGulpfile() {
-  return lint('gulpfile.babel.js');
-}
-
 function getBanner() {
   var banner = '// Backbone.Radio v<%= version %>\n';
   return _.template(banner)(manifest);
@@ -214,7 +189,7 @@ function testBrowser() {
     }, null, function() {
       if (firstBuild) {
         $.livereload.listen({port: 35729, host: 'localhost', start: true});
-        var watcher = gulp.watch(watchFiles, ['lint']);
+        var watcher = gulp.watch(watchFiles, []);
       } else {
         $.livereload.reload('./tmp/__spec-build.js');
       }
@@ -229,29 +204,17 @@ gulp.task('clean', cleanDist);
 // Remove our temporary files
 gulp.task('clean-tmp', cleanTmp);
 
-// Lint our source code
-gulp.task('lint-src', lintSrc);
-
-// Lint our test code
-gulp.task('lint-test', lintTest);
-
-// Lint this file
-gulp.task('lint-gulpfile', lintGulpfile);
-
-// Lint everything
-gulp.task('lint', ['lint-src', 'lint-test', 'lint-gulpfile']);
-
 // Build two versions of the library
-gulp.task('build', ['lint', 'clean'], build);
+gulp.task('build', ['clean'], build);
 
-// Lint and run our tests
-gulp.task('test', ['lint'], test);
+// Run our tests
+gulp.task('test', [], test);
 
 // Set up coverage and run tests
-gulp.task('coverage', ['lint'], coverage);
+gulp.task('coverage', [], coverage);
 
 // Set up a livereload environment for our spec runner `test/runner.html`
-gulp.task('test-browser', ['lint', 'clean-tmp'], testBrowser);
+gulp.task('test-browser', ['clean-tmp'], testBrowser);
 
 // Run the headless unit tests as you make changes.
 gulp.task('watch', watch);

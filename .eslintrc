@@ -1,8 +1,14 @@
 {
-  "parser": "babel-eslint",
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
   "rules": {
     "strict": 0,
-    "quotes": [2, "single"]
+    "quotes": [2, "single"],
+    "no-console": "off",
+    "semi": "error"
   },
   "env": {
     "browser": true,

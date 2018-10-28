@@ -1,6 +1,5 @@
 {
-  extends: "./setup/.globals.json",
-  "parser": "babel-eslint",
+  "extends": "./setup/.globals.json",  
   "rules": {
     "strict": 0,
     "quotes": [2, "single"],

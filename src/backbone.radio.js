@@ -13,7 +13,7 @@ Radio.DEBUG = false;
 function debugText(warning, eventName, channelName) {
   return warning + (channelName ? ' on the ' + channelName + ' channel' : '') +
     ': "' + eventName + '"';
-};
+}
 
 // This is the method that's called when an unregistered event was called.
 // By default, it logs warning to the console. By overriding this you could
@@ -57,7 +57,7 @@ function eventsApi(obj, action, name, rest) {
   }
 
   return false;
-};
+}
 
 // An optimized way to execute callbacks.
 function callHandler(callback, context, args) {
@@ -68,7 +68,7 @@ function callHandler(callback, context, args) {
     case 3: return callback.call(context, args[0], args[1], args[2]);
     default: return callback.apply(context, args);
   }
-};
+}
 
 // A helper used by `off` methods to the handler from the store
 function removeHandler(store, name, callback, context) {
