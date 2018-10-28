@@ -122,7 +122,7 @@ function _mocha() {
 }
 
 function _registerBabel() {
-  require('babel-register');
+  require('babel-core/register');
 }
 
 function test() {
@@ -142,12 +142,6 @@ function coverage(done) {
     });
 }
 
-const watchFiles = ['src/**/*', 'test/**/*', 'package.json', '**/.eslintrc', '.jscsrc'];
-
-// Run the headless unit tests as you make changes.
-function watch() {
-  gulp.watch(watchFiles, ['test']);
-}
 
 // Remove the built files
 gulp.task('clean', cleanDist);
@@ -158,14 +152,8 @@ gulp.task('clean-tmp', cleanTmp);
 // Build two versions of the library
 gulp.task('build', ['clean'], build);
 
-// Run our tests
-gulp.task('test', [], test);
-
 // Set up coverage and run tests
 gulp.task('coverage', [], coverage);
 
-// Run the headless unit tests as you make changes.
-gulp.task('watch', watch);
-
-// An alias of test
-gulp.task('default', ['test']);
+// An alias of build
+gulp.task('default', ['build']);
