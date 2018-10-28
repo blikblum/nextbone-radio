@@ -19,12 +19,8 @@ describe('Channel:', function() {
       expect(this.channel).to.have.property('channelName', 'myChannel');
     });
 
-    it('should have all of the Backbone.Events methods', function() {
-      expect(this.channel).to.contain(Backbone.Events);
-    });
-
-    it('should have all of the Radio.Requests methods', function() {
-      expect(this.channel).to.contain(Backbone.Radio.Requests);
+    it('should be an instance of Backbone.Events', function() {
+      expect(this.channel).to.be.instanceOf(Backbone.Events);
     });
   });
 

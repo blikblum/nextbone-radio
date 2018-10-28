@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import Backbone from 'backbone';
+import { Events } from 'nextbone';
 
-var Radio = Backbone.Radio = {};
+var Radio = {};
 
 Radio.VERSION = '<%= version %>';
 
@@ -164,10 +164,21 @@ function makeCallback(callback) {
   return result;
 }
 
-Radio.Requests = {
+/*
+ * Radio.Channel
+ * ----------------------
+ * A Channel is an object that extends from Backbone.Events
+ *
+ */
+
+class Channel extends Events {
+  constructor(channelName) {
+    super();
+    this.channelName = channelName;
+  }
 
   // Make a request
-  request: function(name) {
+  request(name) {
     var args = _.toArray(arguments).slice(1);
     var results = eventsApi(this, 'request', name, args);
     if (results) {
@@ -189,10 +200,10 @@ Radio.Requests = {
     } else {
       Radio.debugLog('An unhandled request was fired', name, channelName);
     }
-  },
+  }
 
   // Set up a handler for a request
-  reply: function(name, callback, context) {
+  reply(name, callback, context) {
     if (eventsApi(this, 'reply', name, [callback, context])) {
       return this;
     }
@@ -209,10 +220,10 @@ Radio.Requests = {
     };
 
     return this;
-  },
+  }
 
   // Set up a handler that can only be requested once
-  replyOnce: function(name, callback, context) {
+  replyOnce(name, callback, context) {
     if (eventsApi(this, 'replyOnce', name, [callback, context])) {
       return this;
     }
@@ -225,10 +236,10 @@ Radio.Requests = {
     });
 
     return this.reply(name, once, context);
-  },
+  }
 
   // Remove handler(s)
-  stopReplying: function(name, callback, context) {
+  stopReplying(name, callback, context) {
     if (eventsApi(this, 'stopReplying', name)) {
       return this;
     }
@@ -242,10 +253,18 @@ Radio.Requests = {
 
     return this;
   }
-};
+
+  // Remove all handlers from the messaging systems of this channel
+  reset() {
+    this.off();
+    this.stopListening();
+    this.stopReplying();
+    return this;
+  }
+}
 
 /*
- * Backbone.Radio.channel
+ * Radio.channel
  * ----------------------
  * Get a reference to a channel by name.
  *
@@ -261,32 +280,9 @@ Radio.channel = function(channelName) {
   if (Radio._channels[channelName]) {
     return Radio._channels[channelName];
   } else {
-    return (Radio._channels[channelName] = new Radio.Channel(channelName));
+    return (Radio._channels[channelName] = new Channel(channelName));
   }
 };
-
-/*
- * Backbone.Radio.Channel
- * ----------------------
- * A Channel is an object that extends from Backbone.Events,
- * and Radio.Requests.
- *
- */
-
-Radio.Channel = function(channelName) {
-  this.channelName = channelName;
-};
-
-_.extend(Radio.Channel.prototype, Backbone.Events, Radio.Requests, {
-
-  // Remove all handlers from the messaging systems of this channel
-  reset: function() {
-    this.off();
-    this.stopListening();
-    this.stopReplying();
-    return this;
-  }
-});
 
 /*
  * Top-level API
@@ -296,16 +292,14 @@ _.extend(Radio.Channel.prototype, Backbone.Events, Radio.Requests, {
  *
  */
 
-var channel, args, systems = [Backbone.Events, Radio.Requests];
+var methods = ['request', 'reply', 'replyOnce', 'stopReplying', 'on', 'off', 'listenTo', 'stopListening', 'once', 'listenToOnce', 'trigger'];
 
-_.each(systems, function(system) {
-  _.each(system, function(method, methodName) {
-    Radio[methodName] = function(channelName) {
-      args = _.toArray(arguments).slice(1);
-      channel = this.channel(channelName);
-      return channel[methodName].apply(channel, args);
-    };
-  });
+methods.forEach(methodName => {
+  Radio[methodName] = function(channelName) {
+    var args = _.toArray(arguments).slice(1);
+    var channel = this.channel(channelName);
+    return channel[methodName].apply(channel, args);
+  };
 });
 
 Radio.reset = function(channelName) {
@@ -313,4 +307,4 @@ Radio.reset = function(channelName) {
   _.each(channels, function(channel) { channel.reset();});
 };
 
-export default Radio;
+export { Radio, Channel };

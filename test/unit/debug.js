@@ -1,7 +1,7 @@
 describe('DEBUG mode:', function() {
   beforeEach(function() {
     this.channel = Backbone.Radio.channel('myChannel');
-    this.Requests = _.clone(Backbone.Radio.Requests);
+    this.Requests = new Backbone.Radio.Channel();
 
     stub(console, 'warn');
   });

@@ -1,9 +1,12 @@
 module.exports = function(root) {
   global._ = require('underscore');
-  global.Backbone = require('backbone');
+  global.Backbone = require('nextbone');
   global.expect = global.chai.expect;
   global.slice = Array.prototype.slice;
-  global.Radio = require('../../src/backbone.radio');
+  var {Radio, Channel} = require('../../src/backbone.radio');
+  Radio.Channel = Channel;
+  global.Radio = Radio;
+  global.Backbone.Radio = Radio;
 
   beforeEach(function() {
     this.sinon = global.sinon.sandbox.create();

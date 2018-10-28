@@ -2,7 +2,12 @@ global.chai = require('chai');
 global.sinon = require('sinon');
 global.chai.use(require('sinon-chai'));
 
-require('babel-core/register');
+require('babel-core/register')({
+  // This will override `node_modules` ignoring
+  ignore: function(filepath) {
+      return filepath.indexOf('node_modules') !== -1 && filepath.indexOf('nextbone') === -1;
+    }
+});
 require('./setup')();
 
 /*

@@ -4,6 +4,10 @@ describe('Top-level API:', function() {
     stub(this.channel);
   });
 
+  afterEach(function() {
+    Backbone.Radio._channels = {};
+  });
+
   describe('Reset', function() {
     beforeEach(function() {
       this.channelOne = Backbone.Radio.channel('channelOne');

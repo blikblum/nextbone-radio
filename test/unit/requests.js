@@ -1,6 +1,6 @@
 describe('Requests:', function() {
   beforeEach(function() {
-    this.Requests = _.clone(Backbone.Radio.Requests);
+    this.Requests = new Radio.Channel();
     spy(this.Requests, 'request');
     spy(this.Requests, 'reply');
     spy(this.Requests, 'replyOnce');
