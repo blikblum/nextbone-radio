@@ -4,10 +4,13 @@
       "env",
       {
         "targets": {
-          "browsers": ["ie 11"]
+          "browsers": ["chrome 60"]
         },
         "exclude": ["babel-plugin-transform-es2015-typeof-symbol"]
       }
     ]
+  ],
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread"
   ]  
 }

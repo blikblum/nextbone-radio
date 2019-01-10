@@ -6,8 +6,6 @@ import path  from 'path';
 import _ from 'underscore';
 import {rollup} from 'rollup';
 import babel from 'rollup-plugin-babel';
-import fs from 'fs';
-import mkdirp from 'mkdirp';
 
 import manifest  from './package.json';
 
@@ -18,14 +16,13 @@ const $ = loadPlugins();
 const config = manifest.babelBoilerplateOptions;
 const mainFile = manifest.main;
 const destinationFolder = path.dirname(mainFile);
-const exportFileName = path.basename(mainFile, path.extname(mainFile));
 
 const preset = [
   'env',
   {
     modules: false,
     targets: {
-      browsers: ['ie 11']
+      browsers: ['chrome 60']
     },
     exclude: ['babel-plugin-transform-es2015-typeof-symbol']
   }
@@ -39,12 +36,8 @@ function cleanTmp(done) {
   del(['tmp']).then(() => done());
 }
 
-function onError() {
-  $.util.beep();
-}
-
 function getBanner() {
-  var banner = '// Backbone.Radio v<%= version %>\n';
+  var banner = '// Nextbone.Radio v<%= version %>\n';
   return _.template(banner)(manifest);
 }
 
@@ -61,10 +54,10 @@ function buildESModule(bundle) {
   });
 }
 
-function build(done) {
+function build() {
   rollup({
     entry: path.join('src', config.entryFileName),
-    external: ['underscore', 'backbone'],
+    external: ['underscore', 'nextbone'],
     plugins: [
       babel({
         sourceMaps: true,
@@ -72,42 +65,7 @@ function build(done) {
         babelrc: false
       })
     ]
-  }).then(function(bundle) {
-    buildESModule(bundle);
-    var result = bundle.generate({
-      banner: getBanner(),
-      format: 'umd',
-      sourceMap: 'inline',
-      globals: {
-        underscore: '_',
-        backbone: 'Backbone'
-      },
-      sourceMapSource: config.entryFileName + '.js',
-      sourceMapFile: exportFileName + '.js',
-      moduleName: config.mainVarName
-    });
-    var code = _.template(result.code.toString())(manifest) +
-          `\n//# sourceMappingURL=./${exportFileName}.js.map`;
-
-    // Write the generated sourcemap
-    mkdirp.sync(destinationFolder);
-    fs.writeFileSync(path.join(destinationFolder, exportFileName + '.js'), code);
-    fs.writeFileSync(path.join(destinationFolder, `${exportFileName}.js.map`), result.map.toString());
-
-    $.file(exportFileName + '.js', code, { src: true })
-      .pipe($.plumber())
-      .pipe($.sourcemaps.init({ loadMaps: true }))
-      .pipe($.sourcemaps.write('./', {addComment: false}))
-      .pipe(gulp.dest(destinationFolder))
-      .pipe($.filter(['*', '!**/*.js.map']))
-      .pipe($.rename(exportFileName + '.min.js'))
-      .pipe($.sourcemaps.init({ loadMaps: true }))
-      .pipe($.uglify())
-      .pipe($.header(getBanner()))
-      .pipe($.sourcemaps.write('./'))
-      .pipe(gulp.dest(destinationFolder))
-      .on('end', done);
-  }).catch(console.error);
+  }).then(buildESModule).catch(console.error);
 }
 
 // Remove the built files
