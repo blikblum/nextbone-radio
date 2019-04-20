@@ -7,7 +7,7 @@ require('@babel/register')({
   ignore: [
     function(filepath) {
       const result = (filepath.indexOf('node_modules') !== -1 && !filepath.match(/nextbone.js$/));
-      return result
+      return result;
     }
   ] 
   
