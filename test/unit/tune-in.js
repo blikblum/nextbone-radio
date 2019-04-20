@@ -73,12 +73,12 @@ describe('Tune-in:', function() {
 
   describe('When providing a custom logging function and tuning it', function() {
     beforeEach(function() {
-      stub(Backbone.Radio, 'log');
+      stub(Backbone.Radio.logger, 'log');
       this.channel.request('some:event', 'argOne', 'argTwo');
     });
 
     it('should log your custom message', function() {
-      expect(Backbone.Radio.log)
+      expect(Backbone.Radio.logger.log)
         .to.have.been.calledOnce
         .and.calledOn(this.channel)
         .and.calledWithExactly('myChannel', 'some:event', 'argOne', 'argTwo');

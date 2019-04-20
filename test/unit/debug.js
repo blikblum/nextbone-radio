@@ -8,19 +8,19 @@ describe('DEBUG mode:', function() {
 
   describe('when overwriting debugLog', function() {
     beforeEach(function() {
-      this.sinon.stub(Backbone.Radio, 'debugLog');
-      this.originalDebugLog = Backbone.Radio.debugLog;
-      Backbone.Radio.debugLog = spy();
-      Backbone.Radio.DEBUG = true;
+      this.sinon.stub(Backbone.Radio.logger, 'debugLog');
+      this.originalDebugLog = Backbone.Radio.logger.debugLog;
+      Backbone.Radio.logger.debugLog = spy();
+      Backbone.Radio.logger.DEBUG = true;
       this.channel.request('some:event');
     });
 
     afterEach(function() {
-      Backbone.Radio.debugLog = this.originalDebugLog;
+      Backbone.Radio.logger.debugLog = this.originalDebugLog;
     });
 
     it('should execute your custom method', function() {
-      expect(Backbone.Radio.debugLog).to.have.been.calledOnce;
+      expect(Backbone.Radio.logger.debugLog).to.have.been.calledOnce;
     });
 
     it('should not execute the original method', function() {
@@ -30,7 +30,7 @@ describe('DEBUG mode:', function() {
 
   describe('when turned on', function() {
     beforeEach(function() {
-      Backbone.Radio.DEBUG = true;
+      Backbone.Radio.logger.DEBUG = true;
     });
 
     it('should log a console warning when firing a request on a channel without a handler', function() {
@@ -103,6 +103,10 @@ describe('DEBUG mode:', function() {
   });
 
   describe('when turned off', function() {
+    beforeEach(function() {
+      Backbone.Radio.logger.DEBUG = false;
+    });
+
     it('should not log a console warning when firing a request on a channel without a handler', function() {
       this.channel.request('some:event');
       expect(console.warn).to.not.have.been.called;

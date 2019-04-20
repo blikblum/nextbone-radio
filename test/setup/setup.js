@@ -3,8 +3,9 @@ module.exports = function() {
   global.Backbone = require('nextbone');
   global.expect = global.chai.expect;
   global.slice = Array.prototype.slice;
-  var {Radio, Channel} = require('../../src/backbone.radio');
+  var {Radio, Channel, logger} = require('../../src/index');
   Radio.Channel = Channel;
+  Radio.logger = logger;
   global.Radio = Radio;
   global.Backbone.Radio = Radio;
 
