@@ -9,7 +9,7 @@ module.exports = function() {
   global.Backbone.Radio = Radio;
 
   beforeEach(function() {
-    this.sinon = global.sinon.sandbox.create();
+    this.sinon = global.sinon.createSandbox();
     global.stub = this.sinon.stub.bind(this.sinon);
     global.spy  = this.sinon.spy.bind(this.sinon);
   });
