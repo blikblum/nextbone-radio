@@ -3,8 +3,6 @@ import { Events } from 'nextbone';
 
 var Radio = {};
 
-Radio.VERSION = '<%= version %>';
-
 // Whether or not we're in DEBUG mode or not. DEBUG mode helps you
 // get around the issues of lack of warnings when events are mis-typed.
 Radio.DEBUG = false;
