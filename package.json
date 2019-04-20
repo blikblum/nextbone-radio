@@ -2,11 +2,11 @@
   "name": "nextbone-radio",
   "description": "Messaging patterns for Nextbone applications.",
   "homepage": "https://github.com/blikblum/nextbone-radio",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "dist/nextbone-radio.js",
   "module": "dist/nextbone-radio.js",
   "keywords": [
-    "nextbone",    
+    "nextbone",
     "decoupled",
     "pubsub",
     "publish",
@@ -20,7 +20,8 @@
     "test": "mocha test/setup/node.js test/unit/**/*.js",
     "lint": "eslint src test",
     "build": "npm run lint && node tools/build.js",
-    "coverage": "npm run lint && nyc mocha test/setup/node.js test/unit/**/*.js"
+    "coverage": "npm run lint && nyc mocha test/setup/node.js test/unit/**/*.js",
+    "prepublishOnly": "npm run build"
   },
   "author": "Luiz Américo Pereira Câmara",
   "bugs": {
