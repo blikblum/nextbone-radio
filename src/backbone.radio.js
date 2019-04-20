@@ -1,4 +1,4 @@
-import _ from 'underscore';
+import { each, extend, isFunction, once } from 'underscore';
 import { Events } from 'nextbone';
 
 // Format debug text.
@@ -17,15 +17,13 @@ var Radio = {
   // make it throw an Error, for instance. This would make firing a nonexistent event
   // have the same consequence as firing a nonexistent method on an Object.
   debugLog: function(warning, eventName, channelName) {
-    if (Radio.DEBUG && console && console.warn) {
+    if (Radio.DEBUG) {
       console.warn(debugText(warning, eventName, channelName));
     }
   },
 
   // Log information about the channel and event
-  log: function(channelName, eventName) {
-    if (typeof console === 'undefined') { return; }
-    var args = _.toArray(arguments).slice(2);
+  log: function(channelName, eventName, ...args) {
     console.log('[' + channelName + '] "' + eventName + '"', args);
   },
 
@@ -71,7 +69,7 @@ var Radio = {
 
   reset: function(channelName) {
     var channels = !channelName ? this._channels : [this._channels[channelName]];
-    _.each(channels, function(channel) { channel.reset();});
+    each(channels, function(channel) { channel.reset();});
   }
 };
 
@@ -93,7 +91,7 @@ function eventsApi(obj, action, name, rest) {
   if (typeof name === 'object') {
     for (var key in name) {
       var result = obj[action].apply(obj, [key, name[key]].concat(rest));
-      eventSplitter.test(key) ? _.extend(results, result) : results[key] = result;
+      eventSplitter.test(key) ? extend(results, result) : results[key] = result;
     }
     return results;
   }
@@ -135,7 +133,7 @@ function removeHandler(store, name, callback, context) {
 
 function removeHandlers(store, name, callback, context) {
   store || (store = {});
-  var names = name ? [name] : _.keys(store);
+  var names = name ? [name] : Object.keys(store);
   var matched = false;
 
   for (var i = 0, length = names.length; i < length; i++) {
@@ -178,7 +176,7 @@ function _partial(channelName) {
  */
 
 function makeCallback(callback) {
-  if (_.isFunction(callback)) {
+  if (isFunction(callback)) {
     return callback;
   }
   var result = function() { return callback; };
@@ -200,8 +198,7 @@ class Channel extends Events {
   }
 
   // Make a request
-  request(name) {
-    var args = _.toArray(arguments).slice(1);
+  request(name, ...args) {
     var results = eventsApi(this, 'request', name, args);
     if (results) {
       return results;
@@ -252,12 +249,12 @@ class Channel extends Events {
 
     var self = this;
 
-    var once = _.once(function() {
+    var fn = once(function() {
       self.stopReplying(name);
       return makeCallback(callback).apply(this, arguments);
     });
 
-    return this.reply(name, once, context);
+    return this.reply(name, fn, context);
   }
 
   // Remove handler(s)
@@ -296,8 +293,7 @@ class Channel extends Events {
 var methods = ['request', 'reply', 'replyOnce', 'stopReplying', 'on', 'off', 'listenTo', 'stopListening', 'once', 'listenToOnce', 'trigger'];
 
 methods.forEach(methodName => {
-  Radio[methodName] = function(channelName) {
-    var args = _.toArray(arguments).slice(1);
+  Radio[methodName] = function(channelName, ...args) {
     var channel = this.channel(channelName);
     return channel[methodName].apply(channel, args);
   };
