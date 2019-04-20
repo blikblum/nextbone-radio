@@ -3,8 +3,8 @@
   "description": "Messaging patterns for Backbone applications.",
   "homepage": "https://github.com/marionettejs/backbone.radio",
   "version": "0.1.0",
-  "main": "build/nextbone-radio.js",
-  "module": "build/nextbone-radio.js",
+  "main": "dist/nextbone-radio.js",
+  "module": "dist/nextbone-radio.js",
   "keywords": [
     "backbone",
     "marionette",
@@ -25,7 +25,7 @@
   "scripts": {
     "test": "mocha test/setup/node.js test/unit/**/*.js",
     "lint": "eslint src test",
-    "build": "npm run lint && gulp build",
+    "build": "npm run lint && node tools/build.js",
     "coverage": "npm run lint && nyc mocha test/setup/node.js test/unit/**/*.js"
   },
   "author": {
@@ -42,7 +42,7 @@
   },
   "github": "https://github.com/marionettejs/backbone.radio",
   "peerDependencies": {
-    "nextbone": "^0.5.0",
+    "nextbone": "^0.10.0",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
@@ -53,30 +53,13 @@
     "chai": "4.2.0",
     "del": "2.2.0",
     "eslint": "5.8.0",
-    "gulp": "3.9.0",
-    "gulp-file": "0.2.0",
-    "gulp-filter": "3.0.0",
-    "gulp-header": "1.7.1",
-    "gulp-load-plugins": "1.1.0",
-    "gulp-plumber": "1.0.1",
-    "gulp-rename": "1.2.2",
-    "gulp-sourcemaps": "1.6.0",
-    "gulp-uglify": "1.5.1",
-    "gulp-util": "3.0.7",
     "jquery": "^3.2.1",
-    "json-loader": "0.5.3",
-    "mkdirp": "0.5.1",
     "mocha": "6.1.4",
     "nextbone": "^0.10.0",
     "nyc": "^14.0.0",
     "rollup": "1.10.1",
-    "rollup-plugin-babel": "^4.0.1",
     "sinon": "7.3.2",
     "sinon-chai": "3.3.0",
     "underscore": "1.8.3"
-  },
-  "babelBoilerplateOptions": {
-    "entryFileName": "backbone.radio",
-    "mainVarName": "Backbone.Radio"
   }
 }
