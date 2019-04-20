@@ -6,14 +6,11 @@ module.exports = {
       {
         "targets": {
           "browsers": [
-            "ie 11"
+            "chrome 60"
           ]
         }
       }
     ]
-  ],
-  plugins: [
-    "@babel/plugin-proposal-object-rest-spread"
   ],
   overrides: [
     {     
