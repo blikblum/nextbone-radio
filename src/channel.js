@@ -1,4 +1,4 @@
-import { extend, once, isFunction } from 'underscore';
+import { extend, once, isFunction } from 'lodash-es';
 import { Events } from 'nextbone';
 import { logger } from './logger';
 

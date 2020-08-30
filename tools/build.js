@@ -3,17 +3,11 @@
 const del = require('del')
 const rollup = require('rollup')
 const pkg = require('../package.json')
-const _ = require('underscore')
 
 
 let promise = Promise.resolve()
 
 let dependencies = Object.assign({}, pkg.dependencies || {}, pkg.peerDependencies || {})
-
-function getBanner() {
-  var banner = '// Nextbone.Radio v<%= version %>\n';
-  return _.template(banner)(pkg);
-}
 
 // Clean up the output directory
 promise = promise.then(() => del(['dist/*']))
@@ -28,7 +22,7 @@ for (const format of ['es']) {
     file: `dist/nextbone-radio.js`,
     format,
     sourcemap: true,
-    banner: getBanner()
+    banner: `// Nextbone.Radio v${pkg.version}\n`
   })))
 }
 

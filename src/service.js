@@ -1,5 +1,5 @@
 import { Channel } from './channel';
-import { once, each } from 'underscore';
+import { once, each } from 'lodash-es';
 
 const resolved = Promise.resolve();
 

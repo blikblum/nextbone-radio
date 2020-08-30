@@ -1,5 +1,5 @@
 module.exports = function() {
-  global._ = require('underscore');
+  global._ = require('lodash-es');
   global.Backbone = require('nextbone');
   global.expect = global.chai.expect;
   global.slice = Array.prototype.slice;

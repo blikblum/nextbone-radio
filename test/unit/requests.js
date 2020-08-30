@@ -234,11 +234,12 @@ describe('Requests:', function() {
   describe('when unregistering a handler from an object with no requests handlers', function() {
     beforeEach(function() {
       this.Requests.stopReplying('myRequest');
-      this.stopReplying = _.partial(this.Requests.stopReplying, 'myRequest');
     });
 
     it('should not throw an Error.', function() {
-      expect(this.stopReplying).to.not.throw(Error);
+      expect(() => {
+        this.Requests.stopReplying('myRequest');
+      }).to.not.throw(Error);
     });
   });
 

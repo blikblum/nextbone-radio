@@ -1,4 +1,4 @@
-import { each } from 'underscore';
+import { each } from 'lodash-es';
 import { logger } from './logger';
 import { Channel } from './channel';
 
