@@ -2,7 +2,7 @@
   "name": "nextbone-radio",
   "description": "Messaging patterns for Nextbone applications.",
   "homepage": "https://github.com/blikblum/nextbone-radio",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "dist/nextbone-radio.js",
   "module": "dist/nextbone-radio.js",
   "keywords": [
